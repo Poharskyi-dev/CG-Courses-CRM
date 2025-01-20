@@ -187,3 +187,14 @@ components:
           format: email
         password:
           type: string
+
+    # === Error ===
+    Error:
+      type: object
+      required:
+        - message
+
+      properties:
+        message:
+        type: string
+        readOnly: true

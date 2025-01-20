@@ -1,26 +1,20 @@
-package com.opencourse.cgcoursescrm.controller.dto;
+package com.opencourse.cgcoursescrm.service.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class User {
 
-public class UserDto {
-
-    @JsonProperty("user_id")
     private String userId;
     private String role;
-    @JsonProperty("first_name")
     private String firstName;
-    @JsonProperty("last_name")
     private String secondName;
     private String email;
     private String password;
-    @JsonProperty("created_at")
     private String createdAt;
 
-    public UserDto() {
+    public User() {
 
     }
 
-    public UserDto(String userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
+    public User(String userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
         this.userId = userId;
         this.role = role;
         this.firstName = firstName;
@@ -55,10 +49,10 @@ public class UserDto {
     }
 
     public String getSecondName() {
-        return secondName;
+        return this.secondName;
     }
 
-    public void setLastName(String lastName) {
+    public void setSecondName(String lastName) {
         this.secondName = lastName;
     }
 
@@ -88,7 +82,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "User{" +
                 "userId='" + userId + '\'' +
                 ", role='" + role + '\'' +
                 ", firstName='" + firstName + '\'' +
