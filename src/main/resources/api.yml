@@ -1,0 +1,189 @@
+openapi: 3.0.0
+
+info:
+  title: OpenCourse CG School CRM
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+
+tags:
+
+  - name: Users
+    description: CRM user
+  - name: Students
+  - name: Courses
+  - name: Payments
+  - name: Enrollments
+  - name: Results
+  - name: Events
+
+
+# BaseURL => https://opencourse.com
+
+paths:
+
+  # ======== USER ========
+  /users:
+    # ======== USER | C -> CREATE ========
+    post:
+      tags:
+        - Users
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+
+      responses:
+        201:
+          description: User created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+        400:
+          description: User contains invalid data.
+
+    # ======== USER | R -> READ ========
+    get:
+      tags:
+        - Users
+
+      responses:
+        200:
+          description: All Users objects (resource) were successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the User
+
+    # ======== USER ID | R -> READ ========
+    get:
+      tags:
+        - Users
+
+      responses:
+        200:
+          description: User was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    # ======== USER | U -> UPDATE ========
+
+    put:
+      tags:
+        - Users
+
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to update
+          schema:
+            type: string
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - email
+                - password
+              properties:
+                role:
+                  type: string
+                first_name:
+                  type: string
+                second_name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+
+      responses:
+        200:
+          description: User was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    # ======== USER | D -> DELETE ========
+
+    delete:
+      tags:
+        - Users
+
+      responses:
+        204:
+          description: User was successfully deleted.
+
+        400:
+          description: Invalid user ID provided.
+
+        404:
+          description: User not found.
+
+components:
+
+  # === DTO === https://en.wikipedia.org/wiki/Data_transfer_object
+  schemas:
+
+    # === USER ===
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+        role:
+          type: string
+        first_name:
+          type: string
+        second_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - user_id
+        - first_name
+        - email
+        - password
+
+    CreateUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+        first_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
