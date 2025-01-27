@@ -61,8 +61,6 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> updateUser(@PathVariable String userId, @RequestBody UserDto updatedUser) {
-        try {
-            // Вызов метода updateUser сервиса
             userService.updateUser(
                     userId,
                     updatedUser.getFirstName(),
@@ -73,12 +71,6 @@ public class UserController {
             );
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
     }
 
     @PostMapping

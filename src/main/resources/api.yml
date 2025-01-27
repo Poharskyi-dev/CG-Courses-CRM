@@ -4,7 +4,7 @@ info:
   title: OpenCourse CG School CRM
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: https://opencourse.com/crm/api
 
 tags:
 
@@ -33,7 +33,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUser'
+              type: object
+              required:
+                - first_name
+                - email
+                - password
+              properties:
+                role:
+                  type: string
+                first_name:
+                  type: string
+                second_name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
 
       responses:
         201:
@@ -144,6 +160,1075 @@ paths:
         404:
           description: User not found.
 
+  /users/{userId}/students:
+
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the User
+
+    post:
+      tags:
+        - Users
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - student_id
+                - first_name
+                - second_name
+              properties:
+                first_name:
+                  type: string
+                second_name:
+                  type: string
+                lead_status:
+                  type: string
+                  enum:
+                    - WEBSITE_REGISTERED
+                    - INTEREST
+                    - INTENT
+                    - STUDENT
+                    - FINISHED
+                    - LEFT_DISSATISFIED
+                    - BLACKLIST
+                phone_number:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                description:
+                  type: string
+                added_by:
+                  type: integer
+                already_studied:
+                  type: boolean
+                city:
+                  type: string
+                street:
+                  type: string
+                house_number:
+                  type: integer
+                add_address:
+                  type: string
+                zip_code:
+                  type: integer
+                messenger:
+                  type: string
+                  enum:
+                    - TELEGRAM
+                    - FACEBOOK
+                    - WHATSAPP
+                    - INSTAGRAM
+                messenger_nickname:
+                  type: string
+
+      responses:
+        201:
+          description: Student was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+        400:
+          description: Student contains invalid data.
+
+    get:
+      tags:
+        - Users
+
+      responses:
+        200:
+          description: All user students was successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+
+    delete:
+      tags:
+        - Users
+
+      responses:
+        204:
+          description: All user students were successfully deleted.
+
+  # ======== STUDENT ========
+  /students/{studentsId}:
+
+    parameters:
+      - name: studentsId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    # ======== STUDENT | R -> READ ========
+    get:
+      tags:
+        - Students
+
+      responses:
+        200:
+          description: Student data was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+    # ======== STUDENT | U -> UPDATE ========
+    put:
+      tags:
+        - Students
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - student_id
+                - first_name
+                - second_name
+              properties:
+                first_name:
+                  type: string
+                second_name:
+                  type: string
+                lead_status:
+                  type: string
+                  enum:
+                    - WEBSITE_REGISTERED
+                    - INTEREST
+                    - INTENT
+                    - STUDENT
+                    - FINISHED
+                    - LEFT_DISSATISFIED
+                    - BLACKLIST
+                phone_number:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                description:
+                  type: string
+                added_by:
+                  type: integer
+                already_studied:
+                  type: boolean
+                city:
+                  type: string
+                street:
+                  type: string
+                house_number:
+                  type: integer
+                add_address:
+                  type: string
+                zip_code:
+                  type: integer
+                messenger:
+                  type: string
+                  enum:
+                    - TELEGRAM
+                    - FACEBOOK
+                    - WHATSAPP
+                    - INSTAGRAM
+                messenger_nickname:
+                  type: string
+
+      responses:
+        200:
+          description: Student data was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+    # ======== STUDENT | D -> DELETE ========
+    delete:
+      tags:
+        - Students
+
+      responses:
+        204:
+          description: Student data was successfully deleted.
+
+  /students/{studentId}/results:
+
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    post:
+      tags:
+        - Students
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - result_id
+              properties:
+                result_id:
+                  type: integer
+                student_id:
+                  type: integer
+                average_grade:
+                  type: integer
+                  minimum: 0
+                  maximum: 100
+                portfolio_link:
+                  type: string
+                  format: uri
+                description:
+                  type: string
+                is_outstanding:
+                  type: boolean
+
+      responses:
+        201:
+          description: Student result was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+        400:
+          description: Student result contains invalid data.
+
+    get:
+      tags:
+        - Students
+
+      responses:
+        200:
+          description: All student results was successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+
+    delete:
+      tags:
+        - Students
+
+      responses:
+        204:
+          description: All student results were successfully deleted.
+
+  # ======== STUDENT -> PAYMENT ========
+  /students/{studentId}/payments:
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    get:
+      tags:
+        - Students
+      responses:
+        200:
+          description: Payment details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+    delete:
+      tags:
+        - Students
+      responses:
+        204:
+          description: Payment deleted successfully.
+
+  # ======== STUDENT -> COURSE ========
+  /students/{studentId}/courses:
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    get:
+      tags:
+        - Students
+      responses:
+        200:
+          description: Course details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+    delete:
+      tags:
+        - Students
+      responses:
+        204:
+          description: Course deleted successfully.
+
+  # ======== STUDENT -> ENROLLMENT ========
+  /students/{studentId}/enrollments:
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    get:
+      tags:
+        - Students
+      responses:
+        200:
+          description: Enrollment details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+
+    delete:
+      tags:
+        - Students
+      responses:
+        204:
+          description: Enrollment deleted successfully.
+
+  # ======== STUDENT -> EVENT ========
+  /students/{studentId}/events:
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    get:
+      tags:
+        - Students
+      responses:
+        200:
+          description: Event details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+    delete:
+      tags:
+        - Students
+      responses:
+        204:
+          description: Event deleted successfully.
+
+
+
+          # ======== RESULT ========
+  /students/{studentId}/results/:
+
+    parameters:
+      - name: studentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Student
+
+    # ======== RESULT | R -> READ ========
+    get:
+      tags:
+        - Results
+
+      responses:
+        200:
+          description: Student result was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+    # ======== RESULT | U -> UPDATE ========
+    put:
+      tags:
+        - Results
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - result_id
+              properties:
+                student_id:
+                  type: integer
+                average_grade:
+                  type: integer
+                  minimum: 0
+                  maximum: 100
+                portfolio_link:
+                  type: string
+                  format: uri
+                description:
+                  type: string
+                is_outstanding:
+                  type: boolean
+
+      responses:
+        200:
+          description: Student result was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+    # ======== RESULT | D -> DELETE ========
+    delete:
+      tags:
+        - Results
+
+      responses:
+        204:
+          description: Student was successfully deleted.
+
+  # ======== ENROLLMENT ========
+  /enrollments:
+    # ======== ENROLLMENT | C -> CREATE ========
+    post:
+      tags:
+        - Enrollments
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - enrollment_id
+                - student_id
+                - course_id
+              properties:
+                student_id:
+                  type: integer
+                course_id:
+                  type: integer
+                payment_id:
+                  type: integer
+                is_discount:
+                  type: boolean
+
+
+
+      responses:
+        201:
+          description: Enrollment created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+
+        400:
+          description: Enrollment contains invalid data.
+
+    # ======== ENROLLMENT | R -> READ ========
+    get:
+      tags:
+        - Enrollments
+
+      responses:
+        200:
+          description: Enrollments were successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Enrollment'
+
+  /enrollments/{enrollmentId}:
+
+    parameters:
+      - name: enrollmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Enrollment
+
+    # ======== ENROLLMENT ID | R -> READ ========
+    get:
+      tags:
+        - Enrollments
+
+      responses:
+        200:
+          description: Enrollment was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+
+    # ======== ENROLLMENT | U -> UPDATE ========
+    put:
+      tags:
+        - Enrollments
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - enrollment_id
+                - student_id
+                - course_id
+              properties:
+                student_id:
+                  type: integer
+                course_id:
+                  type: integer
+                enrollment_date:
+                  type: string
+                  format: date-time
+                payment_id:
+                  type: integer
+                is_discount:
+                  type: boolean
+
+      responses:
+        200:
+          description: Enrollment was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+
+    # ======== ENROLLMENT | D -> DELETE ========
+    delete:
+      tags:
+        - Enrollments
+
+      responses:
+        204:
+          description: Enrollment was successfully deleted.
+
+        400:
+          description: Invalid enrollment ID provided.
+
+        404:
+          description: Enrollment not found.
+
+  # ======== COURSE ========
+  /courses:
+    # ======== USER | C -> CREATE ========
+    post:
+      tags:
+        - Courses
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - course_id
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                price:
+                  type: integer
+                price_discount:
+                  type: integer
+                hours:
+                  type: integer
+
+      responses:
+        201:
+          description: Course created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+        400:
+          description: Course contains invalid data.
+
+    # ======== COURSE | R -> READ ========
+    get:
+      tags:
+        - Courses
+
+      responses:
+        200:
+          description: All courses data were successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+
+  /courses/{courseId}:
+
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the User
+
+    # ======== COURSE ID | R -> READ ========
+    get:
+      tags:
+        - Courses
+
+      responses:
+        200:
+          description: Course was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+    # ======== COURSE | U -> UPDATE ========
+
+    put:
+      tags:
+        - Courses
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - course_id
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                price:
+                  type: integer
+                price_discount:
+                  type: integer
+                hours:
+                  type: integer
+
+      responses:
+        200:
+          description: Course was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+    # ======== COURSE | D -> DELETE ========
+
+    delete:
+      tags:
+        - Courses
+
+      responses:
+        204:
+          description: Course was successfully deleted.
+
+        400:
+          description: Invalid course ID provided.
+
+        404:
+          description: Course not found.
+
+    # ======== COURSE -> STUDENTS ========
+  /courses/{courseId}/students:
+    parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Course
+
+    get:
+      tags:
+        - Courses
+      responses:
+        200:
+          description: Students retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+
+    delete:
+      tags:
+        - Courses
+      responses:
+        204:
+          description: All students removed from the course successfully.
+
+  # ======== EVENT ========
+  /events:
+    # ======== EVENT | C -> CREATE ========
+    post:
+      tags:
+        - Events
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - event_id
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                price:
+                  type: integer
+                price_discount:
+                  type: integer
+                hours:
+                  type: integer
+                student_id:
+                  type: integer
+
+      responses:
+        201:
+          description: Event created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+        400:
+          description: Event contains invalid data.
+
+    # ======== EVENT | R -> READ ========
+    get:
+      tags:
+        - Events
+
+      responses:
+        200:
+          description: All events were successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /events/{eventId}:
+
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the User
+
+    # ======== EVENT ID | R -> READ ========
+    get:
+      tags:
+        - Events
+
+      responses:
+        200:
+          description: Event was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+    # ======== EVENT | U -> UPDATE ========
+
+    put:
+      tags:
+        - Events
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - event_id
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                price:
+                  type: integer
+                price_discount:
+                  type: integer
+                hours:
+                  type: integer
+                student_id:
+                  type: integer
+
+      responses:
+        200:
+          description: Event was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+    # ======== EVENT | D -> DELETE ========
+
+    delete:
+      tags:
+        - Events
+
+      responses:
+        204:
+          description: Event was successfully deleted.
+
+        400:
+          description: Invalid event ID provided.
+
+        404:
+          description: Event not found.
+
+    # ======== EVENT -> STUDENTS ========
+  /events/{eventId}/students:
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the Event
+
+    get:
+      tags:
+        - Events
+      responses:
+        200:
+          description: Students retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+
+    delete:
+      tags:
+        - Events
+      responses:
+        204:
+          description: All students removed from the event successfully.
+
+  # ======== PAYMENT ========
+  /payments:
+    # ======== PAYMENT | C -> CREATE ========
+    post:
+      tags:
+        - Payments
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - payment_id
+                - value
+                - is_complete
+                - installment_payment
+              properties:
+                student_id:
+                  type: integer
+                status:
+                  type: string
+                  enum:
+                    - WAITING
+                    - COMPLETED
+                    - FAILED
+                value:
+                  type: number
+                  format: float
+                is_complete:
+                  type: boolean
+                created_at:
+                  type: string
+                  format: date-time
+                installment_payment:
+                  type: boolean
+
+      responses:
+        201:
+          description: Payment created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+        400:
+          description: Payment contains invalid data.
+
+    # ======== PAYMENT | R -> READ ========
+    get:
+      tags:
+        - Payments
+
+      responses:
+        200:
+          description: All Payments were successfully read.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+
+  /payments/{paymentId}:
+
+    parameters:
+      - name: paymentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the User
+
+    # ======== PAYMENT ID | R -> READ ========
+    get:
+      tags:
+        - Payments
+
+      responses:
+        200:
+          description: Payment was successfully read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+    # ======== PAYMENT | U -> UPDATE ========
+
+    put:
+      tags:
+        - Payments
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - payment_id
+                - value
+                - is_complete
+                - installment_payment
+              properties:
+                student_id:
+                  type: integer
+                status:
+                  type: string
+                  enum:
+                    - WAITING
+                    - COMPLETED
+                    - FAILED
+                value:
+                  type: number
+                  format: float
+                is_complete:
+                  type: boolean
+                created_at:
+                  type: string
+                  format: date-time
+                installment_payment:
+                  type: boolean
+
+      responses:
+        200:
+          description: Payment was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+    # ======== PAYMENT | D -> DELETE ========
+
+    delete:
+      tags:
+        - Payments
+
+      responses:
+        204:
+          description: Payment was successfully deleted.
+
+        400:
+          description: Invalid payment ID provided.
+
+        404:
+          description: Payment not found.
+
 components:
 
   # === DTO === https://en.wikipedia.org/wiki/Data_transfer_object
@@ -154,7 +1239,7 @@ components:
       type: object
       properties:
         user_id:
-          type: string
+          type: integer
         role:
           type: string
         first_name:
@@ -175,26 +1260,192 @@ components:
         - email
         - password
 
-    CreateUser:
+    # === STUDENT ===
+    Student:
       type: object
       properties:
-        user_id:
-          type: string
+        student_id:
+          type: integer
         first_name:
+          type: string
+        second_name:
+          type: string
+        lead_status:
+          type: string
+          enum:
+            - WEBSITE_REGISTERED
+            - INTEREST
+            - INTENT
+            - STUDENT
+            - FINISHED
+            - LEFT_DISSATISFIED
+            - BLACKLIST
+        phone_number:
           type: string
         email:
           type: string
           format: email
-        password:
+        created_at:
+          type: string
+          format: date-time
+        description:
+          type: string
+        added_by:
+          type: integer
+        already_studied:
+          type: boolean
+        city:
+          type: string
+        street:
+          type: string
+        house_number:
+          type: integer
+        add_address:
+          type: string
+        zip_code:
+          type: integer
+        messenger:
+          type: string
+          enum:
+            - TELEGRAM
+            - FACEBOOK
+            - WHATSAPP
+            - INSTAGRAM
+        messenger_nickname:
+          type: string
+        user_id:
           type: string
 
-    # === Error ===
-    Error:
-      type: object
       required:
-        - message
+        - student_id
+        - first_name
+        - second_name
 
+    # === COURSE ===
+    Course:
+      type: object
       properties:
-        message:
-        type: string
-        readOnly: true
+        course_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        price:
+          type: integer
+        price_discount:
+          type: integer
+        hours:
+          type: integer
+      required:
+        - course_id
+        - title
+
+    # === PAYMENT ===
+    Payment:
+      type: object
+      properties:
+        payment_id:
+          type: integer
+        student_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - WAITING
+            - COMPLETED
+            - FAILED
+        value:
+          type: number
+          format: float
+        is_complete:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        installment_payment:
+          type: boolean
+      required:
+        - payment_id
+        - value
+        - is_complete
+        - installment_payment
+
+    # === ENROLLMENT ===
+    Enrollment:
+      type: object
+      properties:
+        enrollment_id:
+          type: integer
+        student_id:
+          type: integer
+        course_id:
+          type: integer
+        enrollment_date:
+          type: string
+          format: date-time
+        payment_id:
+          type: integer
+        is_discount:
+          type: boolean
+      required:
+        - enrollment_id
+        - student_id
+        - course_id
+
+    # === RESULT ===
+    Result:
+      type: object
+      properties:
+        result_id:
+          type: integer
+        student_id:
+          type: integer
+        average_grade:
+          type: integer
+          minimum: 0
+          maximum: 100
+        portfolio_link:
+          type: string
+          format: uri
+        description:
+          type: string
+        is_outstanding:
+          type: boolean
+      required:
+        - result_id
+
+    # === EVENT ===
+    Event:
+      type: object
+      properties:
+        event_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        price:
+          type: integer
+        price_discount:
+          type: integer
+        hours:
+          type: integer
+        student_id:
+          type: integer
+      required:
+        - event_id
+        - title
+
