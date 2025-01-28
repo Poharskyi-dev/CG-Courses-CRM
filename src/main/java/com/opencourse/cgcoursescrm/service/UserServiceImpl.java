@@ -2,7 +2,10 @@ package com.opencourse.cgcoursescrm.service;
 
 import com.opencourse.cgcoursescrm.controller.dto.UserDto;
 import com.opencourse.cgcoursescrm.exception.UserNotFoundException;
+import com.opencourse.cgcoursescrm.repository.UserRepository;
+import com.opencourse.cgcoursescrm.repository.entity.UserEntity;
 import com.opencourse.cgcoursescrm.service.domain.User;
+import com.opencourse.cgcoursescrm.util.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,7 +18,26 @@ import java.util.*;
 @Component
 public class UserServiceImpl implements UserService {
 
-    private Map<String, User> userMap = new HashMap<>();
+    public final UserRepository userRepository;
+    private Map<String, User> userMap;
+    private UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMap = new HashMap<>();
+        this.userMapper = userMapper;
+    }
+
+    @Override
+    public User getUserById(String userId) throws UserNotFoundException {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(UUID.fromString(userId));
+
+        if (optionalUserEntity.isPresent()) {
+            return userMapper.toDomain(optionalUserEntity.get());
+        }
+
+        throw new UserNotFoundException("User with ID " + userId + " not found");
+        }
 
     @Override
     public List<User> getUsers() {
@@ -25,17 +47,6 @@ public class UserServiceImpl implements UserService {
                 .forEach(user -> userList.add(user));
 
         return List.of();
-    }
-
-    @Override
-    public User getUserById(String userId) throws UserNotFoundException {
-        User user = userMap.get(userId);
-        if (user == null) {
-            throw new UserNotFoundException("User with ID " + userId + " not found");
-        }
-
-
-        return userMap.get(userId);
     }
 
     @Override
