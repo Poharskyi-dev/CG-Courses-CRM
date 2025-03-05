@@ -4,10 +4,11 @@ info:
   title: OpenCourse CG School CRM
   version: 1.0.0
 servers:
-  - url: https://opencourse.com/crm/api
+  - url: http://localhost:8080
 
 tags:
-
+  - name: Auth
+    description: Operations for sign up/in
   - name: Users
     description: CRM user
   - name: Students
@@ -21,6 +22,21 @@ tags:
 # BaseURL => https://opencourse.com
 
 paths:
+
+  /sign-up:
+    post:
+      tags:
+        - Auth
+      description: Create brand new User by themselves.
+      operationId: signUps
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: User created.
 
   # ======== USER ========
   /users:
@@ -1094,31 +1110,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - payment_id
-                - value
-                - is_complete
-                - installment_payment
-              properties:
-                student_id:
-                  type: integer
-                status:
-                  type: string
-                  enum:
-                    - WAITING
-                    - COMPLETED
-                    - FAILED
-                value:
-                  type: number
-                  format: float
-                is_complete:
-                  type: boolean
-                created_at:
-                  type: string
-                  format: date-time
-                installment_payment:
-                  type: boolean
+              $ref: '#/components/schemas/Payment'
 
       responses:
         201:
@@ -1239,7 +1231,8 @@ components:
       type: object
       properties:
         user_id:
-          type: integer
+          type: string
+          readOnly: true
         role:
           type: string
         first_name:
@@ -1265,7 +1258,8 @@ components:
       type: object
       properties:
         student_id:
-          type: integer
+          type: string
+          readOnly: true
         first_name:
           type: string
         second_name:
@@ -1291,7 +1285,7 @@ components:
         description:
           type: string
         added_by:
-          type: integer
+          type: string
         already_studied:
           type: boolean
         city:
@@ -1326,7 +1320,8 @@ components:
       type: object
       properties:
         course_id:
-          type: integer
+          type: string
+          readOnly: true
         title:
           type: string
         description:
@@ -1352,9 +1347,10 @@ components:
       type: object
       properties:
         payment_id:
-          type: integer
+          type: string
+          readOnly: true
         student_id:
-          type: integer
+          type: string
         status:
           type: string
           enum:
@@ -1372,7 +1368,6 @@ components:
         installment_payment:
           type: boolean
       required:
-        - payment_id
         - value
         - is_complete
         - installment_payment
@@ -1382,16 +1377,17 @@ components:
       type: object
       properties:
         enrollment_id:
-          type: integer
+          type: string
+          readOnly: true
         student_id:
-          type: integer
+          type: string
         course_id:
-          type: integer
+          type: string
         enrollment_date:
           type: string
           format: date-time
         payment_id:
-          type: integer
+          type: string
         is_discount:
           type: boolean
       required:
@@ -1404,9 +1400,10 @@ components:
       type: object
       properties:
         result_id:
-          type: integer
+          type: string
+          readOnly: true
         student_id:
-          type: integer
+          type: string
         average_grade:
           type: integer
           minimum: 0
@@ -1426,7 +1423,8 @@ components:
       type: object
       properties:
         event_id:
-          type: integer
+          type: string
+          readOnly: true
         title:
           type: string
         description:
@@ -1444,7 +1442,7 @@ components:
         hours:
           type: integer
         student_id:
-          type: integer
+          type: string
       required:
         - event_id
         - title

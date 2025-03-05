@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset andrii.poharskyi:1
--- Таблиця робітників курсів
+--Таблиця робітників курсів
 CREATE TABLE users (
                        user_id UUID PRIMARY KEY,
                        role VARCHAR(50),

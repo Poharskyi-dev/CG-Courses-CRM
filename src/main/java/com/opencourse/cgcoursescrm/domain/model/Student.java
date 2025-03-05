@@ -1,4 +1,4 @@
-package com.opencourse.cgcoursescrm.service.domain;
+package com.opencourse.cgcoursescrm.domain.model;
 
 public class Student {
 

@@ -2,17 +2,16 @@ package com.opencourse.cgcoursescrm.controller;
 
 import com.opencourse.cgcoursescrm.controller.dto.ErrorDto;
 import com.opencourse.cgcoursescrm.controller.dto.UserDto;
+import com.opencourse.cgcoursescrm.domain.service.UserService;
 import com.opencourse.cgcoursescrm.exception.UserNotFoundException;
-import com.opencourse.cgcoursescrm.service.UserService;
-import com.opencourse.cgcoursescrm.service.domain.User;
-import com.opencourse.cgcoursescrm.util.mapper.UserMapper;
+import com.opencourse.cgcoursescrm.mapper.UserMapper;
+import com.opencourse.cgcoursescrm.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -27,62 +26,64 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers() {
-        List<User> userList = userService.getUsers();
+    // Spring Security: admin
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        User user = userMapper.toDomain(userDto);
 
-        List<UserDto> userDtoList = userList
-                .stream()
-                .map(userMapper::toDto)
-                .collect(Collectors.toList());
+        User createdUser = userService.createUser(user);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userDtoList);
+        UserDto createdUserDto = userMapper.toDto(createdUser);
+
+        return ResponseEntity.ok(createdUserDto);
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable String userId) throws UserNotFoundException {
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getUsers() {
+        List<User> users = userService.getUsers();
 
-        User user = userService.getUserById(userId);
+        List<UserDto> userDtos = users.stream().map(userMapper::toDto).toList();
+
+        return ResponseEntity.ok(userDtos);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
+        UUID userUUID = UUID.fromString(userId);
+
+        User user = userService.getUserById(userUUID);
 
         UserDto userDto = userMapper.toDto(user);
 
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable String userId, @RequestBody UserDto userDto) {
+        UUID userUUID = UUID.fromString(userId);
+        User user = userMapper.toDomain(userDto);
+
+        User updatedUser = userService.updateUser(userUUID, user);
+
+        UserDto updatedUserDto = userMapper.toDto(updatedUser);
+
+        return ResponseEntity.ok(updatedUserDto);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        UUID userUUID = UUID.fromString(userId);
 
-        userService.deleteUser(userId);
+        userService.deleteUser(userUUID);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @PutMapping("/{userId}")
-    public ResponseEntity<Void> updateUser(@PathVariable String userId, @RequestBody UserDto updatedUser) {
-            userService.updateUser(
-                    userId,
-                    updatedUser.getFirstName(),
-                    updatedUser.getSecondName(),
-                    updatedUser.getEmail(),
-                    updatedUser.getPassword(),
-                    updatedUser.getRole()
-            );
-
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-
-        userService.createUser(userDto.getFirstName(), userDto.getPassword(), userDto.getEmail());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorDto> handleUserNotFoundException(UserNotFoundException e) {
-        return new ResponseEntity<>(new ErrorDto(e.getMessage()), HttpStatus.NOT_FOUND);
+        ErrorDto errorDto = new ErrorDto(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
     }
 }

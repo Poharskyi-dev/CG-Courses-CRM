@@ -25,6 +25,20 @@ public class UserEntity {
     @Column(name = "created_at")
     private String createdAt;
 
+    public UserEntity() {
+
+    }
+
+    public UserEntity(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
+        this.userId = userId;
+        this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
+
     public UUID getUserId() {
         return userId;
     }

@@ -1,8 +1,11 @@
-package com.opencourse.cgcoursescrm.service.domain;
+package com.opencourse.cgcoursescrm.domain.model;
+
+import java.util.Objects;
+import java.util.UUID;
 
 public class User {
 
-    private String userId;
+    private UUID userId;
     private String role;
     private String firstName;
     private String secondName;
@@ -10,11 +13,7 @@ public class User {
     private String password;
     private String createdAt;
 
-    public User() {
-
-    }
-
-    public User(String userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
+    public User(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
         this.userId = userId;
         this.role = role;
         this.firstName = firstName;
@@ -24,11 +23,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -36,7 +35,7 @@ public class User {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole() {
         this.role = role;
     }
 
@@ -44,7 +43,7 @@ public class User {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName() {
         this.firstName = firstName;
     }
 
@@ -52,15 +51,15 @@ public class User {
         return this.secondName;
     }
 
-    public void setSecondName(String lastName) {
-        this.secondName = lastName;
+    public void setSecondName() {
+        this.secondName = secondName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail() {
         this.email = email;
     }
 
@@ -68,7 +67,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String encodedPassword) {
         this.password = password;
     }
 
@@ -76,8 +75,14 @@ public class User {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt() {
         this.createdAt = createdAt;
+    }
+
+    public void update(User user) {
+        this.firstName = user.getFirstName();
+        this.secondName = user.getSecondName();
+        this.email = user.getEmail();
     }
 
     @Override
@@ -91,5 +96,22 @@ public class User {
                 ", password='" + password + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User userDto = (User) o;
+        return Objects.equals(userId, userDto.userId)
+                && Objects.equals(firstName, userDto.firstName)
+                && Objects.equals(secondName, userDto.secondName)
+                && Objects.equals(email, userDto.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, firstName, secondName, email);
     }
 }
