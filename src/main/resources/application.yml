@@ -1,14 +1,11 @@
 spring:
   application:
     name: CG-Courses-CRM
-  security:
-    user:
-      name: admin
-      password: $2a$12$jaNnHWdeddeOsTUAJoPlruASRlRk2S8eQyRWPW49.bTsYOJPwOEcC
-#      12341234
   datasource:
     driver-class-name: org.postgresql.Driver
     username: courseadmin
-    password: ${DATABASE_PASSWORD}
+    # Use DATABASE_PASSWORD env variable or fallback to default value
+    # ${ENV_VAR:FALLBACK_DEFAULT_VALUE}
+    password: ${DATABASE_PASSWORD:opencourse149521}
     url: jdbc:postgresql://localhost:5432/opencoursecrm
 
