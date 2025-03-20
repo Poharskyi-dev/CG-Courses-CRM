@@ -1174,7 +1174,7 @@ paths:
               type: object
               required:
                 - payment_id
-                - value
+                - amount
                 - is_complete
                 - installment_payment
               properties:
@@ -1186,7 +1186,7 @@ paths:
                     - WAITING
                     - COMPLETED
                     - FAILED
-                value:
+                amount:
                   type: number
                   format: float
                 is_complete:
@@ -1357,7 +1357,7 @@ components:
             - WAITING
             - COMPLETED
             - FAILED
-        value:
+        amount:
           type: number
           format: float
         is_complete:
@@ -1368,7 +1368,7 @@ components:
         installment_payment:
           type: boolean
       required:
-        - value
+        - amount
         - is_complete
         - installment_payment
 

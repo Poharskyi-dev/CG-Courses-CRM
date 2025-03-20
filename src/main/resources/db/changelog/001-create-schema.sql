@@ -49,7 +49,7 @@ CREATE TABLE payments (
                           payment_id UUID PRIMARY KEY,
                           student_id UUID REFERENCES students(student_id) ON DELETE CASCADE,
                           status VARCHAR(50) DEFAULT 'WAITING' CHECK (status IN ('WAITING', 'PARTIALPAYMENT', 'COMPLETED', 'FAILED')),
-                          value NUMERIC(10, 2) NOT NULL,
+                          amount NUMERIC(10, 2) NOT NULL,
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
