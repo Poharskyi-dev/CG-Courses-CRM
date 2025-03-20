@@ -1,6 +1,11 @@
 spring:
   application:
     name: CG-Courses-CRM
+  security:
+    user:
+      name: admin
+      password: $2a$12$RBGgobHPO2wli/UY6A5GluXODblDtHXHNGs9sNaMDnaDaQHqvkn2W
+
   datasource:
     driver-class-name: org.postgresql.Driver
     username: courseadmin
@@ -9,3 +14,6 @@ spring:
     password: ${DATABASE_PASSWORD:opencourse149521}
     url: jdbc:postgresql://localhost:5432/opencoursecrm
 
+jwt:
+  secret: ${JWT_SECRET}
+  ttl-millis: 43200000

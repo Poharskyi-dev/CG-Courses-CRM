@@ -15,4 +15,5 @@ public interface UserRepository {
 
     void delete(User user);
 
+    Optional<User> findByEmailIgnoreCase(String email);
 }

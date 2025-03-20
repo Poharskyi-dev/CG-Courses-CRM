@@ -1,7 +1,10 @@
 package com.opencourse.cgcoursescrm.controller;
 
+import com.opencourse.cgcoursescrm.controller.dto.AuthTokenDto;
+import com.opencourse.cgcoursescrm.controller.dto.LoginDto;
 import com.opencourse.cgcoursescrm.controller.dto.UserDto;
 import com.opencourse.cgcoursescrm.domain.model.User;
+import com.opencourse.cgcoursescrm.domain.service.LoginService;
 import com.opencourse.cgcoursescrm.domain.service.UserService;
 import com.opencourse.cgcoursescrm.mapper.UserMapper;
 import org.slf4j.Logger;
@@ -9,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +23,13 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final UserMapper userMapper;
     private final UserService userService;
+    private final LoginService loginService;
 
     @Autowired
-    public AuthController(UserMapper userMapper, UserService userService) {
+    public AuthController(UserMapper userMapper, UserService userService, LoginService loginService) {
         this.userMapper = userMapper;
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @PostMapping("/sign-up")
@@ -41,6 +47,15 @@ public class AuthController {
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthTokenDto> login(@RequestBody LoginDto loginDto) {
+
+        String token = loginService.login(loginDto.getEmail(), loginDto.getPassword());
+
+        return ResponseEntity.ok(new AuthTokenDto(token));
 
     }
 }

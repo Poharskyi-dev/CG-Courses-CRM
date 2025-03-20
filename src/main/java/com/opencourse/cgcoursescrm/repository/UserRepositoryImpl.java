@@ -46,4 +46,9 @@ public class UserRepositoryImpl implements UserRepository {
     public void delete(User user) {
         userJpaRepository.deleteById(user.getUserId());
     }
+
+    @Override
+    public Optional<User> findByEmailIgnoreCase(String email) {
+        return userJpaRepository.findByEmail(email.toLowerCase()).map(userMapper::toDomain);
+    }
 }
