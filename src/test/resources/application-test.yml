@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: CG-Courses-CRM
+  security:
+    user:
+      name: admin
+      password: $2a$12$RBGgobHPO2wli/UY6A5GluXODblDtHXHNGs9sNaMDnaDaQHqvkn2W
+
+  datasource:
+    # URL for the H2 in-memory database.
+    # 'jdbc:h2:mem:testdb' creates an in-memory database named "testdb".
+    url: jdbc:h2:mem:testdb
+    # The JDBC driver class for H2.
+    driver-class-name: org.h2.Driver
