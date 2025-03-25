@@ -1,18 +1,21 @@
 package com.opencourse.cgcoursescrm.controller;
 
 import com.opencourse.cgcoursescrm.controller.dto.AuthTokenDto;
+import com.opencourse.cgcoursescrm.controller.dto.ErrorDto;
 import com.opencourse.cgcoursescrm.controller.dto.LoginDto;
 import com.opencourse.cgcoursescrm.controller.dto.UserDto;
 import com.opencourse.cgcoursescrm.domain.model.User;
 import com.opencourse.cgcoursescrm.domain.service.LoginService;
 import com.opencourse.cgcoursescrm.domain.service.UserService;
 import com.opencourse.cgcoursescrm.mapper.UserMapper;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +53,7 @@ public class AuthController {
 
     }
 
+    @RateLimiter(name = "myRateLimiter")
     @PostMapping("/login")
     public ResponseEntity<AuthTokenDto> login(@RequestBody LoginDto loginDto) {
 

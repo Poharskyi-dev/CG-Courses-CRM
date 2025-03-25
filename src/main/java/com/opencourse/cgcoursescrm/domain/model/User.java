@@ -1,10 +1,13 @@
 package com.opencourse.cgcoursescrm.domain.model;
 
+import lombok.Setter;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class User {
 
+    @Setter
     private UUID userId;
     private String role;
     private String firstName;
@@ -25,10 +28,6 @@ public class User {
 
     public UUID getUserId() {
         return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 
     public String getRole() {

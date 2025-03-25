@@ -5,6 +5,7 @@ import com.opencourse.cgcoursescrm.repository.entity.UserEntity;
 import com.opencourse.cgcoursescrm.domain.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.UUID;
 
 @Component
@@ -28,7 +29,7 @@ public class UserMapper {
                 userDto.getFirstName(),
                 userDto.getSecondName(),
                 userDto.getEmail(),
-                userDto.getPassword(),
+                null,
                 userDto.getCreatedAt());
     }
 
@@ -55,13 +56,25 @@ public class UserMapper {
     }
 
     public UserEntity toEntity(User user) {
-        return new UserEntity(
-                user.getUserId(),
-                user.getRole(),
-                user.getFirstName(),
-                user.getSecondName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getCreatedAt());
+        UserEntity userEntity = new UserEntity();
+
+        userEntity.setUserId(user.getUserId());
+        userEntity.setRole(user.getRole());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setSecondName(user.getSecondName());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setPassword(user.getPassword());
+        userEntity.setCreatedAt(user.getCreatedAt());
+
+        return userEntity;
     }
 }
+//        return new UserEntity(
+//                user.getUserId(),
+//                user.getRole(),
+//                user.getFirstName(),
+//                user.getSecondName(),
+//                user.getEmail(),
+//                user.getPassword(),
+//                user.getCreatedAt(),
+//                Collections.emptyList());

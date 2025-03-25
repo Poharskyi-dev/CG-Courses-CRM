@@ -2,6 +2,7 @@ package com.opencourse.cgcoursescrm.repository.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +27,6 @@ public class UserEntity {
     private String createdAt;
 
     public UserEntity() {
-
     }
 
     public UserEntity(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
@@ -37,6 +37,9 @@ public class UserEntity {
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
+    }
+
+    public <T> UserEntity(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt, List<T> ts) {
     }
 
     public UUID getUserId() {

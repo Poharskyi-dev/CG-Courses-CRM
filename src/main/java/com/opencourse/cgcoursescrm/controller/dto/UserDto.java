@@ -1,5 +1,7 @@
 package com.opencourse.cgcoursescrm.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDto {
@@ -14,6 +16,7 @@ public class UserDto {
     private final String email;
     @JsonProperty("created_at")
     private final String createdAt;
+    @JsonIgnore
     private final String password;
 
 
