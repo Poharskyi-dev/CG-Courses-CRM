@@ -1,7 +1,6 @@
 package com.opencourse.cgcoursescrm.controller;
 
 import com.opencourse.cgcoursescrm.controller.dto.AuthTokenDto;
-import com.opencourse.cgcoursescrm.controller.dto.ErrorDto;
 import com.opencourse.cgcoursescrm.controller.dto.LoginDto;
 import com.opencourse.cgcoursescrm.controller.dto.UserDto;
 import com.opencourse.cgcoursescrm.domain.model.User;
@@ -14,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,11 +39,12 @@ public class AuthController {
 
         try {
             userService.createUser(user);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             log.error(
                     "Error creating person with email {} and first name {}.",
                     userDto.getEmail(),
-                    userDto.getFirstName());
+                    userDto.getFirstName(),
+                    exception);
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -63,25 +61,24 @@ public class AuthController {
 
     }
 
-    @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<ErrorDto> handlePersonNotFoundException(PersonNotFoundException e) {
-        ErrorDto errorDto = new ErrorDto("Wrong credentials");
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
-    }
-
-    @ExceptionHandler(PasswordIncorrectException.class)
-    public ResponseEntity<ErrorDto> handlePasswordIncorrectException(PasswordIncorrectException e) {
-        ErrorDto errorDto = new ErrorDto("Wrong credentials");
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
-    }
-
-    @ExceptionHandler(RequestNotPermitted.class)
-    public ResponseEntity<ErrorDto> handleRequestNotPermittedException(RequestNotPermitted e) {
-        ErrorDto errorDto = new ErrorDto("Rate limit exceeded");
-
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorDto);
-    }
-}
+//    @ExceptionHandler(PersonNotFoundException.class)
+//    public ResponseEntity<ErrorDto> handlePersonNotFoundException(PersonNotFoundException e) {
+//        ErrorDto errorDto = new ErrorDto("Wrong credentials");
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+//    }
+//
+//    @ExceptionHandler(PasswordIncorrectException.class)
+//    public ResponseEntity<ErrorDto> handlePasswordIncorrectException(PasswordIncorrectException e) {
+//        ErrorDto errorDto = new ErrorDto("Wrong credentials");
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+//    }
+//
+//    @ExceptionHandler(RequestNotPermitted.class)
+//    public ResponseEntity<ErrorDto> handleRequestNotPermittedException(RequestNotPermitted e) {
+//        ErrorDto errorDto = new ErrorDto("Rate limit exceeded");
+//
+//        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorDto);
+//    }
 }

@@ -1,12 +1,12 @@
 package com.opencourse.cgcoursescrm.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.Instant;
 
 public class UserDto {
 
-    @JsonProperty("user_id")
+    @JsonProperty(value = "user_id", access = JsonProperty.Access.READ_ONLY)
     private final String userId;
     private final String role;
     @JsonProperty("first_name")
@@ -14,14 +14,14 @@ public class UserDto {
     @JsonProperty("last_name")
     private final String secondName;
     private final String email;
-    @JsonProperty("created_at")
-    private final String createdAt;
-    @JsonIgnore
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.READ_ONLY)
+    private final Instant createdAt;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final String password;
 
 
 
-    public UserDto(String userId, String role, String firstName, String secondName, String email, String createdAt, String password) {
+    public UserDto(String userId, String role, String firstName, String secondName, String email, Instant createdAt, String password) {
         this.userId = userId;
         this.role = role;
         this.firstName = firstName;
@@ -55,7 +55,7 @@ public class UserDto {
         return password;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 

@@ -2,6 +2,7 @@ package com.opencourse.cgcoursescrm.domain.model;
 
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,9 +15,9 @@ public class User {
     private String secondName;
     private String email;
     private String password;
-    private String createdAt;
+    private Instant createdAt;
 
-    public User(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
+    public User(UUID userId, String role, String firstName, String secondName, String email, String password, Instant createdAt) {
         this.userId = userId;
         this.role = role;
         this.firstName = firstName;
@@ -66,15 +67,15 @@ public class User {
         return password;
     }
 
-    public void setPassword(String encodedPassword) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt() {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
