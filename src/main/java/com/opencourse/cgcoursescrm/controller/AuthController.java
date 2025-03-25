@@ -62,4 +62,26 @@ public class AuthController {
         return ResponseEntity.ok(new AuthTokenDto(token));
 
     }
+
+    @ExceptionHandler(PersonNotFoundException.class)
+    public ResponseEntity<ErrorDto> handlePersonNotFoundException(PersonNotFoundException e) {
+        ErrorDto errorDto = new ErrorDto("Wrong credentials");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
+    @ExceptionHandler(PasswordIncorrectException.class)
+    public ResponseEntity<ErrorDto> handlePasswordIncorrectException(PasswordIncorrectException e) {
+        ErrorDto errorDto = new ErrorDto("Wrong credentials");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
+    @ExceptionHandler(RequestNotPermitted.class)
+    public ResponseEntity<ErrorDto> handleRequestNotPermittedException(RequestNotPermitted e) {
+        ErrorDto errorDto = new ErrorDto("Rate limit exceeded");
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorDto);
+    }
+}
 }
