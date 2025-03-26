@@ -18,8 +18,8 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getSecondName(),
                 user.getEmail(),
-                user.getPassword(),
-                user.getCreatedAt());
+                user.getCreatedAt(),
+                user.getPassword());
     }
 
     public User toDomain(UserDto userDto) {
@@ -29,7 +29,7 @@ public class UserMapper {
                 userDto.getFirstName(),
                 userDto.getSecondName(),
                 userDto.getEmail(),
-                null,
+                userDto.getPassword(),
                 userDto.getCreatedAt());
     }
 
@@ -63,8 +63,8 @@ public class UserMapper {
         userEntity.setFirstName(user.getFirstName());
         userEntity.setSecondName(user.getSecondName());
         userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
         userEntity.setCreatedAt(user.getCreatedAt());
+        userEntity.setPassword(user.getPassword());
 
         return userEntity;
     }

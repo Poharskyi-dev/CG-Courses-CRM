@@ -15,5 +15,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/opencoursecrm
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:4e723d6a-9bbb-4fb8-8158-09fe8b0d2cdc}
   ttl-millis: 43200000

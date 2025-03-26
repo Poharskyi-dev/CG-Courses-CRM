@@ -7,7 +7,10 @@ import com.opencourse.cgcoursescrm.controller.dto.UserDto;
 import com.opencourse.cgcoursescrm.domain.model.User;
 import com.opencourse.cgcoursescrm.domain.service.LoginService;
 import com.opencourse.cgcoursescrm.domain.service.UserService;
+import com.opencourse.cgcoursescrm.exception.PasswordIncorrectException;
+import com.opencourse.cgcoursescrm.exception.UserNotFoundException;
 import com.opencourse.cgcoursescrm.mapper.UserMapper;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +45,14 @@ public class AuthController {
 
         try {
             userService.createUser(user);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             log.error(
                     "Error creating person with email {} and first name {}.",
                     userDto.getEmail(),
-                    userDto.getFirstName());
+                    userDto.getFirstName(),
+                    exception);
         }
-
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 
     @RateLimiter(name = "myRateLimiter")
@@ -63,8 +65,8 @@ public class AuthController {
 
     }
 
-    @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<ErrorDto> handlePersonNotFoundException(PersonNotFoundException e) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorDto> handlePersonNotFoundException(UserNotFoundException e) {
         ErrorDto errorDto = new ErrorDto("Wrong credentials");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
@@ -83,5 +85,4 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorDto);
     }
-}
 }
