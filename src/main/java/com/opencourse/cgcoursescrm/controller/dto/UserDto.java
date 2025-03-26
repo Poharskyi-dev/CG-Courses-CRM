@@ -15,7 +15,7 @@ public class UserDto {
     private final String email;
     @JsonProperty(value = "created_at", access = JsonProperty.Access.READ_ONLY)
     private final Instant createdAt;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private final String password;
 
 
