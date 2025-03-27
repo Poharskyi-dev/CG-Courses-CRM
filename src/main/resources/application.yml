@@ -1,10 +1,10 @@
 spring:
   application:
     name: CG-Courses-CRM
-  security:
-    user:
-      name: admin
-      password: $2a$12$RBGgobHPO2wli/UY6A5GluXODblDtHXHNGs9sNaMDnaDaQHqvkn2W
+#  security:
+#    user:
+#      name: admin
+#      password: $2a$12$RBGgobHPO2wli/UY6A5GluXODblDtHXHNGs9sNaMDnaDaQHqvkn2W
 
   datasource:
     driver-class-name: org.postgresql.Driver
