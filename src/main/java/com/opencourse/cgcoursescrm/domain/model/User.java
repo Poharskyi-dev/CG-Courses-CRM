@@ -1,20 +1,20 @@
-package com.opencourse.cgcoursescrm.service.domain;
+package com.opencourse.cgcoursescrm.domain.model;
+
+import java.time.Instant;
+import java.util.Objects;
+import java.util.UUID;
 
 public class User {
 
-    private String userId;
+    private UUID userId;
     private String role;
     private String firstName;
     private String secondName;
     private String email;
     private String password;
-    private String createdAt;
+    private Instant createdAt;
 
-    public User() {
-
-    }
-
-    public User(String userId, String role, String firstName, String secondName, String email, String password, String createdAt) {
+    public User(UUID userId, String role, String firstName, String secondName, String email, String password, Instant createdAt) {
         this.userId = userId;
         this.role = role;
         this.firstName = firstName;
@@ -24,12 +24,8 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getRole() {
@@ -52,8 +48,8 @@ public class User {
         return this.secondName;
     }
 
-    public void setSecondName(String lastName) {
-        this.secondName = lastName;
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     public String getEmail() {
@@ -72,12 +68,18 @@ public class User {
         this.password = password;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void update(User user) {
+        this.firstName = user.getFirstName();
+        this.secondName = user.getSecondName();
+        this.email = user.getEmail();
     }
 
     @Override
@@ -92,4 +94,22 @@ public class User {
                 ", createdAt='" + createdAt + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User userDto = (User) o;
+        return Objects.equals(userId, userDto.userId)
+                && Objects.equals(firstName, userDto.firstName)
+                && Objects.equals(secondName, userDto.secondName)
+                && Objects.equals(email, userDto.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, firstName, secondName, email);
+    }
+
 }

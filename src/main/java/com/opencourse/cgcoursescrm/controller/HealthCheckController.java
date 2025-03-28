@@ -14,5 +14,4 @@ public class HealthCheckController {
                 .status(HttpStatus.OK)
                 .body("The server is up and running");
     }
-
 }

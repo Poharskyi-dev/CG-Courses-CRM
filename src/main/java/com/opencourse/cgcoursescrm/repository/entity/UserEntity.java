@@ -1,7 +1,10 @@
 package com.opencourse.cgcoursescrm.repository.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,8 +25,25 @@ public class UserEntity {
     private String email;
     @Column(name = "password")
     private String password;
+    @CreationTimestamp
     @Column(name = "created_at")
-    private String createdAt;
+    private Instant createdAt;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(UUID userId, String role, String firstName, String secondName, String email, String password, Instant createdAt) {
+        this.userId = userId;
+        this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
+
+    public <T> UserEntity(UUID userId, String role, String firstName, String secondName, String email, String password, String createdAt, List<T> ts) {
+    }
 
     public UUID getUserId() {
         return userId;
@@ -73,11 +93,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 }
