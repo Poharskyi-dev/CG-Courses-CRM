@@ -1,6 +1,7 @@
 package com.opencourse.cgcoursescrm.repository.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +25,7 @@ public class UserEntity {
     private String email;
     @Column(name = "password")
     private String password;
+    @CreationTimestamp
     @Column(name = "created_at")
     private Instant createdAt;
 

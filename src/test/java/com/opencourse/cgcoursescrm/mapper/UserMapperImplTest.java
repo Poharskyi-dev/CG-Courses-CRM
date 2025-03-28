@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserMapperTest {
+class UserMapperImplTest {
 
     private UserMapper userMapper = new UserMapper();
 

@@ -5,7 +5,6 @@ import com.opencourse.cgcoursescrm.repository.entity.UserEntity;
 import com.opencourse.cgcoursescrm.domain.model.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.UUID;
 
 @Component
