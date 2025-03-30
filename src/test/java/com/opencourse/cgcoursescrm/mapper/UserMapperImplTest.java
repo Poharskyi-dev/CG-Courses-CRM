@@ -32,7 +32,7 @@ class UserMapperImplTest {
         assertEquals(user.getFirstName(), userDto.getFirstName());
         assertEquals(user.getSecondName(), userDto.getSecondName());
         assertEquals(user.getEmail(), userDto.getEmail());
-        assertEquals(null, userDto.getPassword());
+        assertEquals("12345678", userDto.getPassword());
     }
 
     @Test
