@@ -14,6 +14,9 @@ public class User {
     private String password;
     private Instant createdAt;
 
+    public User() {
+    }
+
     public User(UUID userId, String role, String firstName, String secondName, String email, String password, Instant createdAt) {
         this.userId = userId;
         this.role = role;
